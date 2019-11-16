@@ -41,6 +41,11 @@ public class Hero {
         } else {
             lastDisplacement.set(0, 0);
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.Z)){
+            position.x -= (float) Math.cos(Math.toRadians(angle)) * 120.0f * dt;
+            position.y -= (float) Math.sin(Math.toRadians(angle)) * 120.0f * dt;
+            lastDisplacement.set((float) Math.cos(Math.toRadians(angle)) * 120.0f * dt*(-1), (float) Math.sin(Math.toRadians(angle)) * 120.0f * dt*(-1));
+        }
         if (position.x < 0.0f) {
             position.x = 0.0f;
         }
