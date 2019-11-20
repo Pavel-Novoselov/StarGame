@@ -38,6 +38,7 @@ public class Hero {
     }
 
     public void update(float dt) {
+        //стреляем
         fireTimer += dt;
         if (Gdx.input.isKeyPressed(Input.Keys.P)) {
             if (fireTimer > 0.2f) {
@@ -54,6 +55,11 @@ public class Hero {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             velocity.x += (float) Math.cos(Math.toRadians(angle)) * enginePower * dt;
             velocity.y += (float) Math.sin(Math.toRadians(angle)) * enginePower * dt;
+        }
+        //добавляем задний ход
+        if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            velocity.x -= (float) Math.cos(Math.toRadians(angle)) * enginePower/2 * dt;
+            velocity.y -= (float) Math.sin(Math.toRadians(angle)) * enginePower/2 * dt;
         }
         position.mulAdd(velocity, dt);
         float stopKoef = 1.0f - 2.0f * dt;

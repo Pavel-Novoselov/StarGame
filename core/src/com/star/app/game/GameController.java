@@ -4,6 +4,7 @@ public class GameController {
     private Background background;
     private BulletController bulletController;
     private Hero hero;
+    private AsteroidController asteroidController;
 
     public BulletController getBulletController() {
         return bulletController;
@@ -17,26 +18,45 @@ public class GameController {
         return hero;
     }
 
+    public AsteroidController getAsteroidController() {
+        return asteroidController;
+    }
+
     public GameController() {
         this.background = new Background(this);
         this.hero = new Hero(this);
         this.bulletController = new BulletController();
+        this.asteroidController = new AsteroidController();
+ //       asteroidController.setup();
     }
 
     public void update(float dt) {
         background.update(dt);
         hero.update(dt);
         bulletController.update(dt);
+        asteroidController.update(dt);
         checkCollisions();
     }
 
-    // Заготовка под столкновение с астероидами (для ДЗ)
+    // попадание в астероид (ДЗ)
     public void checkCollisions() {
+        //проверка попадания в астероид
         for (int i = 0; i < bulletController.getActiveList().size(); i++) {
             Bullet b = bulletController.getActiveList().get(i);
-            if (hero.getPosition().dst(b.getPosition()) < 32.0f) { // 32.0f - примерно радиус корабля
-                // b.deactivate();
-                // считаем что столкнулись
+            for (int j = 0; j < asteroidController.getActiveList().size(); j++) {
+                Asteroid a = asteroidController.getActiveList().get(j);
+                if (a.getPosition().dst(b.getPosition()) < 128.0f) { // 128.0f - примерно диаметр астероида
+                    a.deactivate();
+                    // считаем что попали,  астероид уничножен
+                }
+            }
+        }
+        //проверка столкновения астероида и корабля
+        for (int i = 0; i < asteroidController.getActiveList().size(); i++) {
+            Asteroid a = asteroidController.getActiveList().get(i);
+            if (a.getPosition().dst(hero.getPosition()) < 128.0f) { // 128.0f - примерно диаметр астероида
+                    a.deactivate();
+                    // считаем что столкнулись, астероид уничножен
             }
         }
     }
