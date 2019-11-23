@@ -1,12 +1,17 @@
 package com.star.app.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.star.app.StarGame;
+import com.star.app.screen.GameScreen;
 import com.star.app.screen.ScreenManager;
 import com.star.app.screen.utils.Assets;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
+
 
 public class Hero {
     private GameController gc;
@@ -19,6 +24,29 @@ public class Hero {
     private int score;
     private int scoreView;
     private boolean rightOrLeftSocket;
+    private Circle hitArea;
+    private int hpMax;
+    private int hp;
+
+    private final float BASE_SIZE = 64.0f;
+    private final float BASE_RADIUS = BASE_SIZE / 2.0f;
+    private final int HP_MAX = 1000;
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
+    }
+
+    public int getHpMax() {
+        return hpMax;
+    }
+
+    public Circle getHitArea() {
+        return hitArea;
+    }
 
     public int getScoreView() {
         return scoreView;
@@ -30,6 +58,10 @@ public class Hero {
 
     public int getScore() {
         return score;
+    }
+
+    public int getHp() {
+        return hp;
     }
 
     public Vector2 getPosition() {
@@ -47,6 +79,9 @@ public class Hero {
         this.velocity = new Vector2(0, 0);
         this.angle = 0.0f;
         this.enginePower = 750.0f;
+        this.hitArea = new Circle(position, BASE_RADIUS);
+        this.hpMax=HP_MAX;
+        this.hp=hpMax;
     }
 
     public void render(SpriteBatch batch) {
@@ -118,5 +153,21 @@ public class Hero {
             position.y = ScreenManager.SCREEN_HEIGHT;
             velocity.y *= -1;
         }
+        hitArea.setPosition(position);
     }
+
+    public boolean takeDamage(int amount) {
+        hp -= amount;
+        if (hp <= 0) {
+            lostHealth();
+            return true;
+        }
+        return false;
+    }
+
+    public void lostHealth(){
+        //действия при окончании здоровья у игрока
+  //      Gdx.app.exit();
+    }
+
 }

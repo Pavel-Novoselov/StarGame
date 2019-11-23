@@ -1,6 +1,8 @@
 package com.star.app.game;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.star.app.StarGame;
 import com.star.app.screen.ScreenManager;
 
 public class GameController {
@@ -60,6 +62,22 @@ public class GameController {
                 }
             }
         }
-  
+//проверка столкновения астероида и корабля
+        for (int i = 0; i < asteroidController.getActiveList().size(); i++) {
+            Asteroid a = asteroidController.getActiveList().get(i);
+            if (a.getHitArea().overlaps(getHero().getHitArea())) {
+                // считаем что столкнулись, астероид рассыпается, игрок понес потери
+                a.takeDamage(10);
+                hero.takeDamage(10);
+                hero.addScore(10);
+                //игрок отталкивается от астероида(астероид и так уже разрушен, так что оттолкнутся не может)
+                //меняем скорость на противоположную, т.е. отлетаем в стонону, противоположную нашему движению перед столкновением
+                Vector2 tempVelHero = hero.getVelocity();
+                tempVelHero.x *= -1;
+                tempVelHero.y *= -1;
+                hero.setVelocity(tempVelHero);
+            }
+        }
+
     }
 }
