@@ -30,6 +30,9 @@ public class WorldRenderer {
         gc.getBulletController().render(batch);
         gc.getParticleController().render(batch);
         gc.getHero().renderGUI(batch, font32);
+        gc.getHealthController().render(batch);
+        gc.getAmmoController().render(batch);
+        gc.getMoneyController().render(batch);
         batch.end();
     }
 }

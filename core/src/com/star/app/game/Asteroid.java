@@ -48,6 +48,18 @@ public class Asteroid implements Poolable {
 
     public void deactivate() {
         active = false;
+        //при разрушении астероида - запуск аптечки с вероятностью тем выше чем больше scale, т.е. размер астероида
+        if (MathUtils.random(0, 10)<scale/3) {
+            gc.getHealthController().setup(this.getPosition().x, this.getPosition().y, this.getVelocity().x, this.getVelocity().y, 1f);
+        }
+        //запуск боезапаса с вероятностью тем выше чем больше scale, т.е. размер астероида
+        if (MathUtils.random(0, 10)<scale/3) {
+            gc.getAmmoController().setup(this.getPosition().x, this.getPosition().y, this.getVelocity().x, this.getVelocity().y, 0.4f);
+        }
+        //запуск money с вероятностью тем выше чем больше scale, т.е. размер астероида
+        if (MathUtils.random(0, 10)<scale/3) {
+            gc.getMoneyController().setup(this.getPosition().x, this.getPosition().y, this.getVelocity().x, this.getVelocity().y, 0.3f);
+        }
     }
 
     public Asteroid(GameController gc) {
@@ -76,7 +88,7 @@ public class Asteroid implements Poolable {
         return false;
     }
 
-    public void activate(float x, float y, float vx, float vy, float scale) {
+   public void activate(float x, float y, float vx, float vy, float scale) {
         this.position.set(x, y);
         this.velocity.set(vx, vy);
         this.hpMax = (int) (10 * scale);
