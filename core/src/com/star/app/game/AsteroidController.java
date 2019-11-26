@@ -1,10 +1,9 @@
 package com.star.app.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.star.app.game.helpers.ObjectPool;
+import com.star.app.screen.utils.Assets;
 
 public class AsteroidController extends ObjectPool<Asteroid> {
     private GameController gc;
@@ -12,7 +11,6 @@ public class AsteroidController extends ObjectPool<Asteroid> {
     @Override
     protected Asteroid newObject() {
         return new Asteroid(gc);
-
     }
 
     public AsteroidController(GameController gc) {
@@ -35,13 +33,5 @@ public class AsteroidController extends ObjectPool<Asteroid> {
             activeList.get(i).update(dt);
         }
         checkPool();
-        //выпускаем астероиды по нажатию клавишы "O"
-//        asteroidTimer += dt;
-//        if (Gdx.input.isKeyPressed(Input.Keys.O)) {
-//            if (asteroidTimer > 0.2f) {
-//                asteroidTimer = 0.0f;
-//                setup();
-//            }
-//        }
     }
 }
