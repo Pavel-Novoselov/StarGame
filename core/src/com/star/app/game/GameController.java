@@ -10,6 +10,9 @@ public class GameController {
     private AsteroidController asteroidController;
     private BulletController bulletController;
     private ParticleController particleController;
+    private HealthController healthController;
+    private AmmoController ammoController;
+    private MoneyController moneyController;
     private Hero hero;
     private Vector2 tmpVec;
 
@@ -33,12 +36,27 @@ public class GameController {
         return hero;
     }
 
+    public HealthController getHealthController() {
+        return healthController;
+    }
+
+    public AmmoController getAmmoController() {
+        return ammoController;
+    }
+
+    public MoneyController getMoneyController() {
+        return moneyController;
+    }
+
     public GameController() {
         this.background = new Background(this);
         this.hero = new Hero(this);
         this.asteroidController = new AsteroidController(this);
         this.bulletController = new BulletController(this);
-        particleController = new ParticleController();
+        this.particleController = new ParticleController();
+        this.healthController = new HealthController(this);
+        this.ammoController = new AmmoController(this);
+        this.moneyController = new MoneyController(this);
         this.tmpVec = new Vector2(0.0f, 0.0f);
         for (int i = 0; i < 2; i++) {
             this.asteroidController.setup(MathUtils.random(0, ScreenManager.SCREEN_WIDTH), MathUtils.random(0, ScreenManager.SCREEN_HEIGHT),
@@ -52,6 +70,9 @@ public class GameController {
         asteroidController.update(dt);
         bulletController.update(dt);
         particleController.update(dt);
+        healthController.update(dt);
+        ammoController.update(dt);
+        moneyController.update(dt);
         checkCollisions();
     }
 
@@ -99,6 +120,30 @@ public class GameController {
                     }
                     break;
                 }
+            }
+        }
+        //подбираем аптечку
+        for (int i = 0; i < healthController.getActiveList().size(); i++) {
+            Health a = healthController.getActiveList().get(i);
+            if (a.getHitArea().overlaps(hero.getHitArea())) {
+                hero.setHp(hero.getHp()+a.getHpScore());
+                a.deactivate();
+            }
+        }
+        //подбираем боезапас
+        for (int i = 0; i < ammoController.getActiveList().size(); i++) {
+            Ammo a = ammoController.getActiveList().get(i);
+            if (a.getHitArea().overlaps(hero.getHitArea())) {
+                hero.getCurrentWeapon().setCurBullets(hero.getCurrentWeapon().getCurBullets()+a.getBulletAmount());
+                a.deactivate();
+            }
+        }
+        //подбираем money
+        for (int i = 0; i < moneyController.getActiveList().size(); i++) {
+            Money a = moneyController.getActiveList().get(i);
+            if (a.getHitArea().overlaps(hero.getHitArea())) {
+                hero.setMoney(hero.getMoney()+a.getMoneyAmount());
+                a.deactivate();
             }
         }
     }
