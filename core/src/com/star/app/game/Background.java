@@ -64,4 +64,7 @@ public class Background {
             stars[i].update(dt);
         }
     }
+    public void dispose() {
+        textureCosmos.dispose();
+    }
 }

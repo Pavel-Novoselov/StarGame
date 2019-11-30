@@ -102,4 +102,8 @@ public class GameController {
             }
         }
     }
+    public void dispose() {
+        background.dispose();
+    }
+
 }
