@@ -32,6 +32,10 @@ public class Hero {
             return level;
         }
 
+        public void setLevel(int level) {
+            this.level = level;
+        }
+
         public String getTitle() {
             return title;
         }
@@ -79,12 +83,21 @@ public class Hero {
     private int score;
     private int scoreView;
     private Circle hitArea;
+    private Circle tripleHitArea;
     private Weapon currentWeapon;
     private int money;
     private Shop shop;
 
+    public Circle getTripleHitArea() {
+        return tripleHitArea;
+    }
+
     public Skill[] getSkills() {
         return skills;
+    }
+
+    public void setSkills(Skill[] skills) {
+        this.skills = skills;
     }
 
     public Shop getShop() {
@@ -141,6 +154,7 @@ public class Hero {
         this.money = 1000;
         this.strBuilder = new StringBuilder();
         this.hitArea = new Circle(position, 26.0f);
+        this.tripleHitArea = new Circle(position, 78.0f);
         this.keysControl = new KeysControl(OptionsUtils.loadProperties(), keysControlPrefix);
         this.createSkillsTable();
         this.shop = new Shop(this);
