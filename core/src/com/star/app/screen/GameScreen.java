@@ -17,7 +17,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         Assets.getInstance().loadAssets(ScreenManager.ScreenType.GAME);
-        this.gameController = new GameController();
+        this.gameController = new GameController(batch);
         this.worldRenderer = new WorldRenderer(gameController, batch);
     }
 

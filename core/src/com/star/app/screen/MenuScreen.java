@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.star.app.game.Background;
 import com.star.app.screen.utils.Assets;
 import com.star.app.screen.utils.OptionsUtils;
@@ -44,8 +45,8 @@ public class MenuScreen extends AbstractScreen {
 
         Button btnNewGame = new TextButton("New Game", textButtonStyle);
         Button btnExitGame = new TextButton("Exit Game", textButtonStyle);
-        btnNewGame.setPosition(480, 210);
-        btnExitGame.setPosition(480, 110);
+        btnNewGame.setPosition(ScreenManager.HALF_SCREEN_WIDTH - btnNewGame.getWidth() / 2, ScreenManager.HALF_SCREEN_HEIGHT - 200);
+        btnExitGame.setPosition(ScreenManager.HALF_SCREEN_WIDTH - btnExitGame.getWidth() / 2, ScreenManager.HALF_SCREEN_HEIGHT - 300);
 
         btnNewGame.addListener(new ChangeListener() {
             @Override
@@ -82,7 +83,7 @@ public class MenuScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.render(batch);
-        font72.draw(batch, "Star Game 2019", 0, 600, 1280, 1, false);
+        font72.draw(batch, "Star Game 2019", 0, ScreenManager.HALF_SCREEN_HEIGHT + 0, ScreenManager.SCREEN_WIDTH, Align.center, false);
         batch.end();
         stage.draw();
     }
