@@ -155,28 +155,23 @@ public class GameController {
         //изменение направления движения powerUp при попадании в ближнюю зону игрока (например хит Арея х 3)
         for (int i = 0; i < powerUpsController.getActiveList().size(); i++) {
             PowerUp p = powerUpsController.getActiveList().get(i);
-            if (hero.getTripleHitArea().contains(p.getPosition())){
+            if (p.getPosition().dst(hero.getPosition().x, hero.getPosition().y)<100){
                 //меняем направление движения поверапов
                 float v1 = p.getVelocity().len();
                 float v2 = hero.getVelocity().len();
 
-                float m1 =12.0f;
-                float m2 = 1.1f;
+                float m1 =1.0f;
+                float m2 = 12.1f;
 
                 float th1 = p.getVelocity().angleRad();
                 float th2 = hero.getVelocity().angleRad();
 
                 float phi1 = tmpVec.set(hero.getPosition()).sub(p.getPosition()).angleRad();
- //               float phi2 = tmpVec.set(p.getPosition()).sub(hero.getPosition()).angleRad();
 
                 float v1xN = (float) (((v1 * cos(th1 - phi1) * (m1 - m2) + 2 * m2 * v2 * cos(th2 - phi1)) / (m1 + m2)) * cos(phi1) + v1 * sin(th1 - phi1) * cos(phi1 + PI / 2.0f));
                 float v1yN = (float) (((v1 * cos(th1 - phi1) * (m1 - m2) + 2 * m2 * v2 * cos(th2 - phi1)) / (m1 + m2)) * sin(phi1) + v1 * sin(th1 - phi1) * sin(phi1 + PI / 2.0f));
 
- //               float v2xN = (float) (((v2 * cos(th2 - phi2) * (m2 - m1) + 2 * m1 * v1 * cos(th1 - phi2)) / (m2 + m1)) * cos(phi2) + v2 * sin(th2 - phi2) * cos(phi2 + PI / 2.0f));
- //               float v2yN = (float) (((v2 * cos(th2 - phi2) * (m2 - m1) + 2 * m1 * v1 * cos(th1 - phi2)) / (m2 + m1)) * sin(phi2) + v2 * sin(th2 - phi2) * sin(phi2 + PI / 2.0f));
-
                 p.getVelocity().set(v1xN*(-1.0f), v1yN*(-1.0f));
- //               hero.getVelocity().set(v2xN, v2yN);
             }
 
         }
