@@ -2,15 +2,21 @@ package com.star.app.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.star.app.screen.ScreenManager;
+import com.star.app.screen.utils.Assets;
 
 import static java.lang.Math.*;
 
 public class GameController {
+    public static final int SPACE_WIDTH = 9600;
+    public static final int SPACE_HEIGHT = 5400;
+
+    private Music music;
     private int level;
     private Background background;
     private AsteroidController asteroidController;
@@ -20,6 +26,17 @@ public class GameController {
     private Hero hero;
     private Vector2 tmpVec;
     private Stage stage;
+
+    private float msgTimer;
+    private String msg;
+
+    public float getMsgTimer() {
+        return msgTimer;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
 
     public Stage getStage() {
         return stage;
@@ -49,6 +66,10 @@ public class GameController {
         return hero;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public GameController(SpriteBatch batch) {
         this.background = new Background(this);
         this.hero = new Hero(this, "PLAYER1");
@@ -61,13 +82,23 @@ public class GameController {
         this.stage.addActor(hero.getShop());
         this.level = 1;
         Gdx.input.setInputProcessor(stage);
-        for (int i = 0; i < 2; i++) {
-            this.asteroidController.setup(MathUtils.random(0, ScreenManager.SCREEN_WIDTH), MathUtils.random(0, ScreenManager.SCREEN_HEIGHT),
-                    MathUtils.random(-150.0f, 150.0f), MathUtils.random(-150.0f, 150.0f), 1.0f);
+        generateTwoBigAsteroids();
+        this.msg = "Level 1";
+        this.msgTimer = 3.0f;
+        this.music = Assets.getInstance().getAssetManager().get("audio/Music.mp3");
+        this.music.setLooping(true);
+        this.music.play();
+    }
+
+    public void generateTwoBigAsteroids() {
+        for (int i = 0; i < 200; i++) {
+            this.asteroidController.setup(MathUtils.random(0, GameController.SPACE_WIDTH), MathUtils.random(0, GameController.SPACE_HEIGHT),
+                    MathUtils.random(-150.0f, 150.0f), MathUtils.random(-150.0f, 150.0f), 0.6f);
         }
     }
 
     public void update(float dt) {
+        msgTimer -= dt;
         background.update(dt);
         hero.update(dt);
         asteroidController.update(dt);
@@ -75,8 +106,12 @@ public class GameController {
         particleController.update(dt);
         powerUpsController.update(dt);
         checkCollisions();
-        if(!hero.isAlive()) {
+        if (!hero.isAlive()) {
             ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAMEOVER, hero);
+        }
+        if (asteroidController.getActiveList().size() == 0) {
+            level++;
+            generateTwoBigAsteroids();
         }
         stage.act(dt);
     }
