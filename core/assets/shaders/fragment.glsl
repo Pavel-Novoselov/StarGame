@@ -10,11 +10,11 @@ void main() {
   gl_FragColor = texture2D(u_texture, v_texCoords);
   float gray = (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b) / 3.0f;
   float dst = sqrt((v_texCoords.x - px) * (v_texCoords.x - px) + (v_texCoords.y - py) * (v_texCoords.y - py));
-  gl_FragColor.r *= (2.0f - dst * 3);
-  gl_FragColor.g *= (2.0f - dst * 3);
-  gl_FragColor.b *= (2.0f - dst * 3);
-
-
+  if(dst > 0.2f) {
+    gl_FragColor.r *= (1.4f - dst * 2);
+    gl_FragColor.g *= (1.4f - dst * 2);
+    gl_FragColor.b *= (1.4f - dst * 2);
+  }
 
 //  if(v_texCoords.y < 0.2) {
 //     vec2 point = v_texCoords;
