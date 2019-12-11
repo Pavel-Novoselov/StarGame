@@ -67,13 +67,11 @@ public class WorldRenderer {
 
         batch.begin();
         gc.getHero().render(batch);
-        if (gc.getBot().isAlive()) {
-            gc.getBot().render(batch);
-        }
         gc.getAsteroidController().render(batch);
         gc.getBulletController().render(batch);
         gc.getPowerUpsController().render(batch);
         gc.getParticleController().render(batch);
+        gc.getBotController().render(batch);
         gc.getInfoController().render(batch, font32);
         batch.end();
         frameBuffer.end();
