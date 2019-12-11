@@ -25,8 +25,9 @@ public class GameController {
     private ParticleController particleController;
     private PowerUpsController powerUpsController;
     private InfoController infoController;
+    private BotController botController;
     private Hero hero;
-    private Bot bot;
+ //   private Bot bot;
     private Vector2 tmpVec;
     private Stage stage;
 
@@ -34,8 +35,8 @@ public class GameController {
     private float msgTimer;
     private String msg;
 
-    public Bot getBot() {
-        return bot;
+    public BotController getBotController() {
+        return botController;
     }
 
     public float getMsgTimer() {
@@ -85,7 +86,7 @@ public class GameController {
     public GameController(SpriteBatch batch) {
         this.background = new Background(this);
         this.hero = new Hero(this, "PLAYER1");
-        this.bot = new Bot(this);
+        this.botController = new BotController(this);
         this.asteroidController = new AsteroidController(this);
         this.bulletController = new BulletController(this);
         this.particleController = new ParticleController();
@@ -97,6 +98,7 @@ public class GameController {
         this.level = 1;
         Gdx.input.setInputProcessor(stage);
         generateTwoBigAsteroids();
+        generateFiveBots();
         this.msg = "Level 1";
         this.msgTimer = 3.0f;
         this.tmpStr = new StringBuilder();
@@ -112,13 +114,18 @@ public class GameController {
         }
     }
 
+    public void generateFiveBots() {
+        for (int i = 0; i < 5; i++) {
+            this.botController.setup(MathUtils.random(0, GameController.SPACE_WIDTH), MathUtils.random(0, GameController.SPACE_HEIGHT),
+                    MathUtils.random(-50.0f, 50.0f), MathUtils.random(-50.0f, 50.0f));
+        }
+    }
+
     public void update(float dt) {
         msgTimer -= dt;
         background.update(dt);
         hero.update(dt);
-        if (bot.isAlive()) {
-            bot.update(dt);
-        }
+        botController.update(dt);
         asteroidController.update(dt);
         bulletController.update(dt);
         particleController.update(dt);
@@ -186,8 +193,13 @@ public class GameController {
                     continue;
                 }
             }
-            if (checkPhysicHit(bot, a)) {
-                a.takeDamage(2);
+
+            for (int j=0;j < botController.getActiveList().size(); j++) {
+                Bot bot = botController.getActiveList().get(j);
+                if (checkPhysicHit(bot, a)) {
+                    bot.takeDamage(2);
+                    a.takeDamage(2);
+                }
             }
         }
 
@@ -217,13 +229,16 @@ public class GameController {
         for (int i = 0; i < bulletController.getActiveList().size(); i++) {
             Bullet b = bulletController.getActiveList().get(i);
 
-            if (b.getOwner().getOwnerType() == OwnerType.PLAYER && bot.isAlive()) {
-                if (bot.getHitArea().contains(b.getPosition())) {
-                    bot.takeDamage(b.getDamage());
-                    b.deactivate();
+            for (int j=0;j < botController.getActiveList().size(); j++) {
+                Bot bot = botController.getActiveList().get(j);
+
+                if (b.getOwner().getOwnerType() == OwnerType.PLAYER) {
+                    if (bot.getHitArea().contains(b.getPosition())) {
+                        bot.takeDamage(b.getDamage()*5);
+                        b.deactivate();
+                    }
                 }
             }
-
             if (b.getOwner().getOwnerType() == OwnerType.BOT) {
                 if (hero.getHitArea().contains(b.getPosition())) {
                     hero.takeDamage(b.getDamage());
